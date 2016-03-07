@@ -10,7 +10,7 @@ void setup()
 
 void draw() { 
   myRacket1.scene();    // Wrong ... the scene should not be related to myRacket1...
-  myRacket1.ball();
+  myRacket1.ball();     // Kinda wrong ... could actually start randomly at 1 or 2 
   myRacket1.display(); 
   myRacket2.display(); 
   myRacket1.move1(); 
