@@ -1,22 +1,60 @@
 Racket myRacket1; 
 Racket myRacket2;
 
-void setup() 
-{ 
+float xBall=320, yBall=160;
+float xspeed = 1;
+float yspeed;
+
+void setup() { 
   size(640, 320);
   myRacket1 = new Racket(color(255), 10, height/2, 1); 
   myRacket2 = new Racket(color(255), width-10, height/2, 1);
 }
 
 void draw() { 
-  myRacket1.scene();    // Wrong ... the scene should not be related to myRacket1...
-  myRacket1.ball();     // Kinda wrong ... could actually start randomly at 1 or 2 
-  myRacket1.display(); 
-  myRacket2.display(); 
+  scene();     
+  ball();       
+  movement();   
+  show();
+}
+
+// Display ball + movement 
+void ball() {
+  float xMove= xBall + xspeed;
+  stroke(0);
+  fill(255);
+  ellipse(xBall, yBall, 20, 20);
+
+  if (key == ENTER) {
+    xBall = xMove;
+    yBall = yBall + yspeed;
+  }
+}
+
+// Scene : Background + net
+void scene() {
+  background(155, 255, 155);
+  line(width/2, 0, width/2, height);
+}
+
+// Movement of the ball
+void movement() {
+  if (xBall > (myRacket2.xpos - 15) &&  (dist(yBall,yBall,myRacket2.ypos,myRacket2.ypos) < 25) || xBall < (myRacket1.xpos + 15) && (dist(yBall,yBall,myRacket1.ypos,myRacket1.ypos) < 25)) {
+    xspeed = xspeed * -1; yspeed = random(-0.2,0.2);
+  } else if (xBall > width || xBall < 0 ) {
+    xBall = width/2;
+  }
+}
+
+// Display and movement of both rackets
+void show() {
+  myRacket1.show(); 
+  myRacket2.show(); 
   myRacket1.move1(); 
   myRacket2.move2();
 }
 
+// Class racket
 class Racket { 
   color c; 
   float xpos; 
@@ -29,44 +67,25 @@ class Racket {
     ypos = tempYpos; 
     yspeed = tempYspeed;
   }
-
-  void ball() {
-    float xBall=xpos+20,yBall=height/2,wBall=20,hBall=20;
-    stroke(0);
-    fill(255);
-    ellipse(xBall,yBall,wBall,hBall);
   
-    if (keyCode == ENTER) {
-      xBall = xBall + 10;
+    void show() {
+      stroke(0); 
+      fill(c); 
+      rectMode(CENTER); 
+      rect(xpos, ypos, 20, 40);
+    }
+    void move1() { 
+      if (keyCode == 'U') { 
+        ypos = ypos - yspeed;
+      } else if (keyCode == 'D') { 
+        ypos = ypos + yspeed;
+      }
+    }
+    void move2() { 
+      if (keyCode == UP) { 
+        ypos = ypos - yspeed;
+      } else if (keyCode == DOWN) { 
+        ypos = ypos + yspeed;
+      }
     }
   }
-
-
-  void scene() {
-    background(155,155,155);
-    line(width/2,0,width/2,height);
-  }
-
-  void display() { 
-    stroke(0); 
-    fill(c); 
-    rectMode(CENTER); 
-    rect(xpos, ypos, 20, 40);
-  }
-
-  void move2() { 
-    if (keyCode == UP) { 
-      ypos = ypos - yspeed;
-    } else if (keyCode == DOWN) { 
-      ypos = ypos + yspeed;
-    }
-  }
-
-  void move1() { 
-    if (keyCode == 'U') { 
-      ypos = ypos - yspeed;
-    } else if (keyCode == 'D') { 
-      ypos = ypos + yspeed;
-    }
-  }
-}
