@@ -2,8 +2,10 @@ Racket myRacket1;
 Racket myRacket2;
 
 float xBall=320, yBall=160;
-float xspeed = 1;
-float yspeed;
+float xSpeed = 1;
+float ballAngle;
+float addSpeed=1;
+float xMove;
 
 void setup() { 
   size(640, 320);
@@ -20,14 +22,14 @@ void draw() {
 
 // Display ball + movement 
 void ball() {
-  float xMove= xBall + xspeed;
+  float xMove= xBall + xSpeed;
   stroke(0);
   fill(255);
   ellipse(xBall, yBall, 20, 20);
 
   if (key == ENTER) {
     xBall = xMove;
-    yBall = yBall + yspeed;
+    yBall = yBall + ballAngle;
   }
 }
 
@@ -40,9 +42,11 @@ void scene() {
 // Movement of the ball
 void movement() {
   if (xBall > (myRacket2.xpos - 15) &&  (dist(yBall,yBall,myRacket2.ypos,myRacket2.ypos) < 25) || xBall < (myRacket1.xpos + 15) && (dist(yBall,yBall,myRacket1.ypos,myRacket1.ypos) < 25)) {
-    xspeed = xspeed * -1; yspeed = random(-0.2,0.2);
+    xSpeed = xSpeed * -1; ballAngle = random(-1.5,0.5); xSpeed = xSpeed * 1.1;
   } else if (xBall > width || xBall < 0 ) {
     xBall = width/2;
+  } else if (yBall > (height-10) || yBall < 10) {
+    ballAngle = ballAngle * -0.5; 
   }
 }
 
