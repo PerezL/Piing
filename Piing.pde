@@ -9,6 +9,8 @@ float xMove;
 float score=0;
 int end=5;
 
+float test=0;
+
 void setup() { 
   size(640, 320);
   myRacket1 = new Racket(color(255), 10, height/2, 1, 0); 
@@ -17,7 +19,8 @@ void setup() {
 
 void draw() { 
   scene();     
-  ball();       
+  ball();
+  //starting();  
   movement();   
   show();
   message();
@@ -26,15 +29,13 @@ void draw() {
 
 // Display ball + movement 
 void ball() {
-  float xMove= xBall + xSpeed;
   stroke(0);
   fill(255);
   ellipse(xBall, yBall, 20, 20);
+}
 
-  if (key == ENTER) {
-    xBall = xMove;
-    yBall = yBall + ballAngle;
-  }
+void starting() {
+
 }
 
 // Scene : Background + net
@@ -58,15 +59,25 @@ void quit() {
   }
 
 // Movement of the ball
+
 void movement() {
+   float xMove= xBall + xSpeed;
+  
+    if (key == ' ') {
+      test += 1 ; 
+    } else if (test > 0) {   
+    xBall = xMove;
+    yBall = yBall + ballAngle;
+  }
+
   if (xBall > (myRacket2.xpos - 15) &&  (dist(yBall, yBall, myRacket2.ypos, myRacket2.ypos) < 25) || xBall < (myRacket1.xpos + 15) && (dist(yBall, yBall, myRacket1.ypos, myRacket1.ypos) < 25)) {
     xSpeed = xSpeed * -1; 
     ballAngle = random(-0.5, 0.5); 
     xSpeed = xSpeed * 1.1;
   } else if (xBall > width) {
-    xBall = width/2;  myRacket1.score += 1;
+    xBall = width/2; yBall = height/2; myRacket1.score += 1; ballAngle = 0; 
   } else if (xBall < 0 ) {
-    xBall = width/2; myRacket2.score += 1;
+    xBall = width/2; yBall = height/2; myRacket2.score += 1; ballAngle = 0; 
   } else if (yBall > (height-10) || yBall < 10) {
     ballAngle = ballAngle * -0.5;
   }
